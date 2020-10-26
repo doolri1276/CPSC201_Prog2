@@ -1,30 +1,59 @@
 package com.kyungminum;
 
+import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 
 public class Record {
+    public static final int NAME_LIMIT = 15;
     private int accountNumber;
     private char[] firstName;
     private char[] lastName;
     private double balance;
 
-
-
+    /**
+     * Constructors
+     * */
     Record(){
-        accountNumber = -1;
-        firstName = new char[15];
-        lastName = new char[15];
-        balance = 0;
+        this(-1, new char[NAME_LIMIT],new char[NAME_LIMIT],0);
     }
 
-    public void read(RandomAccessFile f){
+    public Record(int accountNumber, String fn, String ln, int balance) {
+        this(accountNumber, fn.toCharArray(), ln.toCharArray(), balance);
+    }
+
+    Record(int accountNumber, char[] fn, char[] ln, double balance) {
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.firstName = new char[NAME_LIMIT];
+        this.lastName = new char[NAME_LIMIT];
+        for(int i=0;i<NAME_LIMIT;i++){
+            firstName[i] = i<fn.length?fn[i]:' ';
+            lastName[i] = i<ln.length?ln[i]:' ';
+        }
 
     }
 
-    public void write(RandomAccessFile f){
-
+    /**
+     * Methods
+     * */
+    public void read(RandomAccessFile f) throws IOException {
+        accountNumber = f.readInt();
+        firstName = f.readUTF().toCharArray();
+        lastName = f.readUTF().toCharArray();
+        balance = f.readDouble();
     }
 
+    public void write(RandomAccessFile f) throws IOException {
+        f.writeInt(accountNumber);
+        f.writeUTF(String.valueOf(firstName));
+        f.writeUTF(String.valueOf(lastName));
+        f.writeDouble(balance);
+    }
+
+    /**
+    * Getters and Setters
+    * */
     public int getAccountNumber() {
         return accountNumber;
     }
@@ -33,16 +62,16 @@ public class Record {
         this.accountNumber = accountNumber;
     }
 
-    public char[] getFirstName() {
-        return firstName;
+    public String getFirstName() {
+        return String.valueOf(firstName);
     }
 
     public void setFirstName(char[] firstName) {
         this.firstName = firstName;
     }
 
-    public char[] getLastName() {
-        return lastName;
+    public String getLastName() {
+        return String.valueOf(lastName);
     }
 
     public void setLastName(char[] lastName) {

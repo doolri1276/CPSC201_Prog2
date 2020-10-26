@@ -1,25 +1,54 @@
 package com.kyungminum;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class Block {
+    public static final int SIZE = 46;
     private Record record;
-    private int next;
-    private int prev;
+    private long next;
+    private long prev;
 
+    /**
+     * Constructor
+     * */
     Block(){
         record = new Record();
-
+        next = -1;
+        prev = -1;
     }
 
+    /**
+     * Methods
+     * */
     public void read(RandomAccessFile f){
-        record.read(f);
+        try {
+            record.read(f);
+            prev = f.readLong();
+            next = f.readLong();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public void write(RandomAccessFile f){
+    public void write(RandomAccessFile f) throws IOException {
         record.write(f);
+        f.writeLong(prev);
+        f.writeLong(next);
     }
 
+    public void display(){
+        System.out.println(prev + "\t"+record.getAccountNumber()+"\t"+next);
+        System.out.println(record.getFirstName()+" "+record.getLastName()+" "+record.getBalance());
+        System.out.println();
+    }
+
+    /**
+     * Getter and Setter
+     * */
     public Record getRecord() {
         return record;
     }
@@ -28,19 +57,19 @@ public class Block {
         this.record = record;
     }
 
-    public int getNext() {
+    public long getNext() {
         return next;
     }
 
-    public void setNext(int next) {
+    public void setNext(long next) {
         this.next = next;
     }
 
-    public int getPrev() {
+    public long getPrev() {
         return prev;
     }
 
-    public void setPrev(int prev) {
+    public void setPrev(long prev) {
         this.prev = prev;
     }
 }
