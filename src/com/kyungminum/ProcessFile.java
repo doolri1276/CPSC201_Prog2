@@ -74,6 +74,10 @@ public class ProcessFile {
     }
 
     public void addAccount(int accountName, char[] firstname, char[] lastname, double balance){
+        addAccount(new Record(accountName, firstname, lastname, balance));
+    }
+
+    public void addAccount(Record r){
 
     }
 
