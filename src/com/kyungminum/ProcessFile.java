@@ -81,12 +81,57 @@ public class ProcessFile {
 
     }
 
-    public Block seek(long actNumber){
-
-        return null;
+    public Block searchBlock(int acct) throws IOException {
+        long cur = DP;
+        Block b = new Block();
+        Record r = new Record();
+        f.seek(cur);
+        b.read(f);
+        r = b.getRecord();
+        while(r.getAccountNumber()<acct){
+            cur = b.getNext();
+            if (cur == -1){
+                break;
+            }
+            f.seek(cur);
+            b.read(f);
+            r = b.getRecord();
+        }
+        if (cur == -1){
+            return null;
+        }
+        if (acct > r.getAccountNumber()){
+            return null;
+        }
+        return b;
     }
 
     public void removeAccount(int accountName){
 
+    }
+
+    public long searchPointer(int acct) throws IOException {
+        long cur = DP;
+        Block b = new Block();
+        Record r = new Record();
+        f.seek(cur);
+        b.read(f);
+        r = b.getRecord();
+        while(r.getAccountNumber()<acct){
+            cur = b.getNext();
+            if (cur == -1){
+                break;
+            }
+            f.seek(cur);
+            b.read(f);
+            r = b.getRecord();
+        }
+        if (cur == -1){
+            return -1L;
+        }
+        if (acct > r.getAccountNumber()){
+            return -1L;
+        }
+        return cur;
     }
 }
