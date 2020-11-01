@@ -82,6 +82,7 @@ public class ProcessFile {
     }
 
     public Block searchBlock(int acct) throws IOException {
+        if(DP == -1) return null;
         long cur = DP;
         Block b = new Block();
         Record r = new Record();
@@ -111,6 +112,7 @@ public class ProcessFile {
     }
 
     public long searchPointer(int acct) throws IOException {
+        if(DP == -1) return -1L;
         long cur = DP;
         Block b = new Block();
         Record r = new Record();
