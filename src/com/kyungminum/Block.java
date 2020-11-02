@@ -42,7 +42,7 @@ public class Block {
 
     public void display(){
         System.out.println(prev + "\t"+record.getAccountNumber()+"\t"+next);
-        System.out.println(record.getFirstName()+" "+record.getLastName()+" "+record.getBalance());
+        System.out.println("["+record.getFirstName()+"] ["+record.getLastName()+"] "+record.getBalance());
         System.out.println();
     }
 

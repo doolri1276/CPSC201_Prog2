@@ -37,11 +37,16 @@ public class Record {
     /**
      * Methods
      * */
-    public void read(RandomAccessFile f) throws IOException {
-        accountNumber = f.readInt();
-        firstName = f.readUTF().toCharArray();
-        lastName = f.readUTF().toCharArray();
-        balance = f.readDouble();
+    public void read(RandomAccessFile f)  {
+        try {
+            accountNumber = f.readInt();
+            firstName = f.readUTF().toCharArray();
+            lastName = f.readUTF().toCharArray();
+            balance = f.readDouble();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void write(RandomAccessFile f) throws IOException {
@@ -66,16 +71,20 @@ public class Record {
         return String.valueOf(firstName);
     }
 
-    public void setFirstName(char[] firstName) {
-        this.firstName = firstName;
+    public void setFirstName(char[] fn) {
+        for(int i=0;i<NAME_LIMIT;i++){
+            firstName[i] = i<fn.length?fn[i]:' ';
+        }
     }
 
     public String getLastName() {
         return String.valueOf(lastName);
     }
 
-    public void setLastName(char[] lastName) {
-        this.lastName = lastName;
+    public void setLastName(char[] ln) {
+        for(int i=0;i<NAME_LIMIT;i++){
+            lastName[i] = i<ln.length?ln[i]:' ';
+        }
     }
 
     public double getBalance() {
