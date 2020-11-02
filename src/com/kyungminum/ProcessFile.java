@@ -73,12 +73,14 @@ public class ProcessFile {
 
     }
 
-    public void addAccount(int accountName, char[] firstname, char[] lastname, double balance){
-        addAccount(new Record(accountName, firstname, lastname, balance));
+    public boolean addAccount(int accountName, char[] firstname, char[] lastname, double balance){
+        return addAccount(new Record(accountName, firstname, lastname, balance));
     }
 
-    public void addAccount(Record r){
+    public boolean addAccount(Record r){
 
+
+        return false;
     }
 
     public Block searchBlock(int acct) throws IOException {
@@ -107,8 +109,25 @@ public class ProcessFile {
         return b;
     }
 
-    public void removeAccount(int accountName){
+    public boolean removeAccount(int accountName){
+        if(DP == -1) return false;
+        long cur = DP;
+        Block b = new Block();
+        Record record;
+        while (cur !=-1){
+            try {
+                f.seek(cur);
 
+            } catch (IOException e) {
+                return false;
+            }
+
+        }
+
+
+
+
+        return false;
     }
 
     public long searchPointer(int acct) throws IOException {
