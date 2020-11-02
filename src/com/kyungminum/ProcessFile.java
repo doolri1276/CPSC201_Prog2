@@ -82,6 +82,39 @@ public class ProcessFile {
     }
 
     public boolean addAccount(Record r){
+        int acct = r.getAccountNumber();
+        long cur = FP;
+
+        Block b = new Block();
+        Block pb = searchPrevBlock(r.getAccountNumber());
+        Block nb = new Block();
+
+        if (searchPointer(acct) != -1L){
+            return false;
+        }
+        try{
+            f.seek(DP);
+            if(pb == null){
+                b.setRecord(r);
+                b.setPrev(-1L);
+                b.setNext(DP);
+                DP = cur;
+                return true;
+            }
+            else{
+                b.setRecord(r);
+                b.setPrev(searchPointer(pb.getRecord().getAccountNumber()));
+                b.setNext(pb.getNext());
+
+                pb.setNext(cur);
+
+
+            }
+        } catch (IOException e){
+            return false;
+        }
+
+
 
 
         return false;
@@ -119,6 +152,41 @@ public class ProcessFile {
             return null;
         }
         return b;
+    }
+
+
+    public Block searchPrevBlock(int acct) {
+        if(DP == -1) return null;
+        long cur = DP;
+        Block b = new Block();
+        Record r = new Record();
+        try {
+            f.seek(cur);
+        } catch (IOException e) {
+            return null;
+        }
+        b.read(f);
+        r = b.getRecord();
+        while(r.getAccountNumber()<acct){
+            cur = b.getNext();
+            if (cur == -1){
+                break;
+            }
+            try {
+                f.seek(cur);
+            } catch (IOException e) {
+                return null;
+            }
+            b.read(f);
+            r = b.getRecord();
+        }
+        if (cur == -1){
+            return null;
+        }
+        if (acct > r.getAccountNumber()){
+            return b;
+        }
+        return null;
     }
 
     public boolean removeAccount(int accountName){
