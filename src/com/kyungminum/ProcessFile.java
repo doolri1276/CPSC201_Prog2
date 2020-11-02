@@ -85,8 +85,9 @@ public class ProcessFile {
     }
 
     public boolean addAccount(Record r){
-        if (DP == -1)
+        if (this.size == FILE_SIZE){
             return false;
+        }
         int acct = r.getAccountNumber();
         long cur = FP;
 
