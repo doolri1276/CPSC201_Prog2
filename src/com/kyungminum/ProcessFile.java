@@ -92,8 +92,6 @@ public class ProcessFile {
         long cur = FP;
 
         Block b = new Block();
-        Block pb = searchPrevBlock(r.getAccountNumber());
-        Block nb = new Block();
 
         if (size == 0){
             try{
@@ -128,40 +126,56 @@ public class ProcessFile {
             } catch (IOException e) {
                 return false;
             }
-        }
-        else {
-
+        } else {
             if (searchPointer(acct) != -1L){
+                System.out.println(searchPointer(acct));
                 return false;
             }
-
             try{
-                if(pb == null){
+                long prev = searchPrevPointer(acct);
+                System.out.println(prev);
+                if(prev == -1L){
                     f.seek(cur);
+                    b.read(f);
+                    long next = b.getNext();
                     b.setRecord(r);
                     b.setPrev(-1L);
                     b.setNext(DP);
+                    f.seek(cur);
+                    b.write(f);
+
+                    f.seek(next);
+                    b.read(f);
+                    b.setPrev(-1L);
+                    f.seek(next);
+                    b.write(f);
 
                     f.seek(DP);
-                    nb.read(f);
-                    nb.setPrev(FP);
+                    b.read(f);
+                    b.setPrev(FP);
+                    f.seek(DP);
+                    b.write(f);
 
                     DP = cur;
-                    FP+=b.SIZE;
+                    f.seek(0);
+                    f.writeLong(DP);
+
+                    FP = next;
+                    f.seek(8);
+                    f.writeLong(FP);
                     size += 1;
 
                     return true;
                 }
-                long prev = searchPointer(pb.getRecord().getAccountNumber());
-                long next = pb.getNext();
-
+                f.seek(prev);
+                long next = b.getNext();
                 if(next == -1L){
                     f.seek(cur);
                     b.setRecord(r);
                     b.setPrev(prev);
 
                     f.seek(prev);
-                    pb.setNext(FP);
+                    b.setNext(FP);
 
                     FP+=b.SIZE;
                     size += 1;
@@ -226,19 +240,20 @@ public class ProcessFile {
     }
 
 
-    public Block searchPrevBlock(int acct) {
-        if(DP == -1) return null;
+    public long searchPrevPointer(int acct) {
+        if(DP == -1) return -1L;
         long cur = DP;
         Block b = new Block();
         Record r = new Record();
         try {
             f.seek(cur);
         } catch (IOException e) {
-            return null;
+            return -1L;
         }
         b.read(f);
         r = b.getRecord();
         while(r.getAccountNumber()<acct){
+            System.out.println(cur);
             cur = b.getNext();
             if (cur == -1){
                 break;
@@ -246,18 +261,18 @@ public class ProcessFile {
             try {
                 f.seek(cur);
             } catch (IOException e) {
-                return null;
+                return -1L;
             }
             b.read(f);
             r = b.getRecord();
         }
         if (cur == -1){
-            return null;
+            return -1l;
         }
         if (acct > r.getAccountNumber()){
-            return b;
+            return cur;
         }
-        return null;
+        return -1L;
     }
 
     public boolean removeAccount(int accountName){
@@ -376,7 +391,7 @@ public class ProcessFile {
         if (cur == -1){
             return -1L;
         }
-        if (acct > r.getAccountNumber()){
+        if (acct != r.getAccountNumber()){
             return -1L;
         }
         return cur;
