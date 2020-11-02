@@ -336,4 +336,12 @@ public class ProcessFile {
         }
         return cur;
     }
+
+    public void close(){
+        try {
+            f.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

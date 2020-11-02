@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class Block {
-    public static final int SIZE = 46;
+    public static final int SIZE = 84;
     private Record record;
-    private long next;
-    private long prev;
+    private int next;
+    private int prev;
 
     /**
      * Constructor
@@ -25,8 +25,8 @@ public class Block {
     public void read(RandomAccessFile f){
         try {
             record.read(f);
-            prev = f.readLong();
-            next = f.readLong();
+            prev = f.readInt();
+            next = f.readInt();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,8 +36,8 @@ public class Block {
 
     public void write(RandomAccessFile f) throws IOException {
         record.write(f);
-        f.writeLong(prev);
-        f.writeLong(next);
+        f.writeInt(prev);
+        f.writeInt(next);
     }
 
     public void display(){
@@ -66,7 +66,7 @@ public class Block {
     }
 
     public void setNext(long next) {
-        this.next = next;
+        this.next = (int) next;
     }
 
     public long getPrev() {
@@ -74,6 +74,6 @@ public class Block {
     }
 
     public void setPrev(long prev) {
-        this.prev = prev;
+        this.prev = (int) prev;
     }
 }
