@@ -85,42 +85,64 @@ public class ProcessFile {
     }
 
     public boolean addAccount(Record r){
+        if (DP == -1)
+            return false;
         int acct = r.getAccountNumber();
         long cur = FP;
 
         Block b = new Block();
         Block pb = searchPrevBlock(r.getAccountNumber());
-        Block nb = new Block();
+        long prev = searchPointer(pb.getRecord().getAccountNumber());
+        long next = pb.getNext();
 
         if (searchPointer(acct) != -1L){
             return false;
         }
         try{
-            f.seek(DP);
             if(pb == null){
+                f.seek(cur);
                 b.setRecord(r);
                 b.setPrev(-1L);
                 b.setNext(DP);
+
+                f.seek(DP);
+                b.setPrev(FP);
+
                 DP = cur;
+                FP+=b.SIZE;
+
+                return true;
+            } else if(next == -1L){
+                f.seek(cur);
+                b.setRecord(r);
+                b.setPrev(prev);
+
+                f.seek(prev);
+                b.setNext(FP);
+
+                FP+=b.SIZE;
+
                 return true;
             }
             else{
+                f.seek(cur);
                 b.setRecord(r);
-                b.setPrev(searchPointer(pb.getRecord().getAccountNumber()));
-                b.setNext(pb.getNext());
+                b.setPrev(prev);
+                b.setNext(next);
 
-                pb.setNext(cur);
+                f.seek(prev);
+                b.setNext(cur);
 
+                f.seek(next);
+                b.setPrev(cur);
 
+                FP+=b.SIZE;
+
+                return true;
             }
         } catch (IOException e){
             return false;
         }
-
-
-
-
-        return false;
     }
 
     public Block searchBlock(int acct) {
