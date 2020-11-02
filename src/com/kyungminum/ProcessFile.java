@@ -313,6 +313,11 @@ public class ProcessFile {
             System.out.println("없음 존재안함");
             return false;
 
+        }else{
+            System.out.println(">>>>");
+            System.out.println(b);
+            System.out.println(cur);
+            System.out.println("<<<<");
         }
 
         try{
@@ -421,7 +426,7 @@ public class ProcessFile {
         if(DP == -1) return -1L;
         long cur = DP;
         Block b = new Block();
-        Record r = new Record();
+        Record r;
         try {
             f.seek(cur);
         } catch (IOException e) {
