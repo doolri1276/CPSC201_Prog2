@@ -290,14 +290,22 @@ public class ProcessFile {
         try {
             f.seek(cur);
         } catch (IOException e) {
+            e.printStackTrace();
             return -1L;
         }
+
         long ocur = cur;
         b.read(f);
         r = b.getRecord();
+
+        //제일 작은 값인지 확인
+        if(acct<=r.getAccountNumber()) return -1;
+
         while(r.getAccountNumber()<acct){
+
             ocur= cur;
             cur = b.getNext();
+            System.out.println("들어왔다.... ocur : "+ocur+", cur: "+cur);
             if (cur == -1){
                 break;
             }
@@ -308,14 +316,18 @@ public class ProcessFile {
             }
             b.read(f);
             r = b.getRecord();
+            System.out.println("[[][][][][][]"+b);
         }
-        if (cur == -1){
-            return ocur;
-        }
-        if (acct > r.getAccountNumber()){
-            return cur;
-        }
-        return -1L;
+
+
+
+//        if (cur == -1){
+        return ocur;
+//        }
+//        if (acct > r.getAccountNumber()){
+//            return cur;
+//        }
+//        return -1L;
     }
 
     public boolean removeAccount(int accountName){
