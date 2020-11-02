@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class Block {
-    public static final int SIZE = 84;
+    public static final int SIZE = 54;
     private Record record;
     private int next;
     private int prev;

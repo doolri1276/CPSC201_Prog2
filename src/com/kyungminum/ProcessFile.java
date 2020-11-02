@@ -98,10 +98,12 @@ public class ProcessFile {
         if (size == 0){
             try{
                 DP = cur;
+                f.seek(0);
                 f.writeLong(DP);
 
                 f.seek(cur);
                 b.read(f);
+                long next = b.getNext();
                 b.setRecord(r);
                 b.setPrev(-1L);
                 b.setNext(-1L);
@@ -109,7 +111,16 @@ public class ProcessFile {
                 b.write(f);
 
                 size += 1;
-                FP += b.SIZE;
+
+                f.seek(next);
+                b.read(f);
+                b.setPrev(-1L);
+                f.seek(next);
+                b.write(f);
+
+                FP = next;
+
+                f.seek(8);
                 f.writeLong(FP);
 
                 return true;
