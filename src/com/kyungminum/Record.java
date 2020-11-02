@@ -37,15 +37,12 @@ public class Record {
     /**
      * Methods
      * */
-    public void read(RandomAccessFile f)  {
-        try {
-            accountNumber = f.readInt();
-            firstName = f.readUTF().toCharArray();
-            lastName = f.readUTF().toCharArray();
-            balance = f.readDouble();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void read(RandomAccessFile f) throws IOException {
+
+        accountNumber = f.readInt();
+        firstName = f.readUTF().toCharArray();
+        lastName = f.readUTF().toCharArray();
+        balance = f.readDouble();
 
     }
 

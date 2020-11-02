@@ -244,7 +244,7 @@ public class ProcessFile {
         if(DP == -1) return -1L;
         long cur = DP;
         Block b = new Block();
-        Record r = new Record();
+        Record r;
         try {
             f.seek(cur);
         } catch (IOException e) {
@@ -282,7 +282,11 @@ public class ProcessFile {
         Block b = searchBlock(accountName);
         long cur = searchPointer(accountName);
 
-        if(b == null || cur == -1L) return false;
+        if(b == null || cur == -1L) {
+            System.out.println("없음 존재안함");
+            return false;
+
+        }
 
         try{
             if(b.getPrev() == -1){
@@ -317,7 +321,7 @@ public class ProcessFile {
 
 
             }else if(b.getNext()==-1){
-                b.setNext(FP);
+
                 FP = cur;
                 f.seek(8);
                 f.writeLong(FP);
@@ -325,15 +329,16 @@ public class ProcessFile {
                 b.clearRecord();
                 long prev = b.getPrev();
                 b.setPrev(-1L);
+                b.setNext(-1L);
                 f.seek(cur);
                 b.write(f);
 
-                long next = b.getNext();
-                f.seek(next);
-                b.read(f);
-                b.setPrev(cur);
-                f.seek(next);
-                b.write(f);
+//                long next = b.getNext();
+//                f.seek(next);
+//                b.read(f);
+//                b.setPrev(cur);
+//                f.seek(next);
+//                b.write(f);
 
                 f.seek(prev);
                 b.read(f);

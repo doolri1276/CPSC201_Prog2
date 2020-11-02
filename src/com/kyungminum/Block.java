@@ -41,9 +41,7 @@ public class Block {
     }
 
     public void display(){
-        System.out.println(prev + "\t"+record.getAccountNumber()+"\t"+next);
-        System.out.println("["+record.getFirstName()+"] ["+record.getLastName()+"] "+record.getBalance());
-        System.out.println();
+        System.out.println(toString());
     }
 
     public void clearRecord(){
@@ -75,5 +73,11 @@ public class Block {
 
     public void setPrev(long prev) {
         this.prev = (int) prev;
+    }
+
+    @Override
+    public String toString() {
+        return prev + "\t"+record.getAccountNumber()+"\t"+next+"\n"+
+        "["+record.getFirstName()+"] ["+record.getLastName()+"] "+record.getBalance()+"\n";
     }
 }
