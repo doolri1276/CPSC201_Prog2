@@ -128,12 +128,10 @@ public class ProcessFile {
             }
         } else {
             if (searchPointer(acct) != -1L){
-                System.out.println("searchpointer: " + searchPointer(acct));
                 return false;
             }
             try{
                 long prev = searchPrevPointer(acct);
-                System.out.println("prev: " + prev+", acct : "+acct);
                 if(prev == -1L){
                     size += 1;
 
@@ -177,7 +175,6 @@ public class ProcessFile {
                 b.setNext(cur);
                 f.seek(prev);
                 b.write(f);
-                System.out.println("next:" + next);
                 if(next == -1L){
                     size++;
 
@@ -213,6 +210,7 @@ public class ProcessFile {
                 else{
                     size++;
 
+
                     f.seek(cur);
                     b.read(f);
                     long nextP = b.getNext();
@@ -231,7 +229,7 @@ public class ProcessFile {
                     f.seek(next);
                     b.read(f);
                     b.setPrev(cur);
-                    f.seek(prev);
+                    f.seek(next);
                     b.write(f);
 
                     if (size != FILE_SIZE) {
@@ -335,14 +333,8 @@ public class ProcessFile {
         long cur = searchPointer(accountName);
 
         if(b == null || cur == -1L) {
-            System.out.println("없음 존재안함");
             return false;
 
-        }else{
-            System.out.println(">>>>");
-            System.out.println(b);
-            System.out.println(cur);
-            System.out.println("<<<<");
         }
 
         try{

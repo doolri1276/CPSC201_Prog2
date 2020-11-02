@@ -16,20 +16,11 @@ public class Main {
 
         ProcessFile processFile = new ProcessFile("data.bin");
 
-//        System.out.println(processFile.addAccount(900, "gegwe", "egwg", 4005));
-//        System.out.println(processFile.addAccount(800, "faf", "egwg", 1009));
-//        System.out.println(processFile.addAccount(700, "gegefewwe", "egwg", 2097));
-
-
-        System.out.println(processFile.addAccount(900, "gegwe", "egwg", 4005));
-
         System.out.println(processFile.addAccount(700, "gegefewwe", "egwg", 2097));
-
-        System.out.println("&#$&!#@$*(@!$*@(");
-
-        System.out.println("**** PREV : "+processFile.searchPrevPointer(800));
-
+        System.out.println(processFile.addAccount(900, "gegwe", "egwg", 4005));
         System.out.println(processFile.addAccount(800, "faf", "egwg", 1009));
+
+
 
 
 
