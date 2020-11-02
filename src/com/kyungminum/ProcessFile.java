@@ -11,6 +11,7 @@ public class ProcessFile {
     private long DP = -1;
     private long FP = -1;
     private long cur = -1;
+    private int size = 0;
 
     ProcessFile(String fileName){
         try {
@@ -55,6 +56,7 @@ public class ProcessFile {
 
     public void displayFile() throws IOException {
         cur = 0;
+        size = 0;
 
 
         f.seek(cur);
@@ -66,9 +68,11 @@ public class ProcessFile {
         Block b = new Block();
         for (int i=0;i<FILE_SIZE;i++){
             b.read(f);
+            if(b.getRecord().getAccountNumber()!= -1) size++;
             b.display();
 
         }
+        System.out.println("SIZE : "+size);
 
 
     }
