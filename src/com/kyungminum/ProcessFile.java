@@ -443,13 +443,13 @@ public class ProcessFile {
         b.read(f);
         r = b.getRecord();
         while(r.getAccountNumber()<=acct){
-            cur = b.getNext();
             if (cur == -1){
                 break;
             }
             if(r.getAccountNumber() == acct){
                 return cur;
             }
+            cur = b.getNext();
             try {
                 f.seek(cur);
             } catch (IOException e) {
