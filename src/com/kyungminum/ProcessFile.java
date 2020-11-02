@@ -123,19 +123,43 @@ public class ProcessFile {
 
     public boolean removeAccount(int accountName){
         if(DP == -1) return false;
-        long cur = DP;
-        Block b = new Block();
-        Record record;
-        while (cur !=-1){
-            try {
-                f.seek(cur);
 
-            } catch (IOException e) {
-                return false;
+
+        Block b = searchBlock(accountName);
+        long cur = searchPointer(accountName);
+
+        if(b == null || cur == -1L) return false;
+
+        try{
+            if(b.getPrev() == -1){
+                f.seek(0);
+                DP = b.getNext();
+                f.writeLong(DP);
+                b.clearRecord();
+                b.setNext(FP);
+                FP = cur;
+                f.writeLong(FP);
+
+                f.seek(cur);
+                b.write(f);
+
+                f.seek(DP);
+                b.read(f);
+                b.setPrev(-1);
+                f.seek(DP);
+                b.write(f);
+                size--;
+                return true;
+            }else if(b.getNext()==-1){
+                b.setNext(FP);
+
+            }else{
+
             }
 
+        } catch (IOException e) {
+            return false;
         }
-
 
 
 
