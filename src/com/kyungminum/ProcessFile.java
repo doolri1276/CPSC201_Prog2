@@ -148,22 +148,65 @@ public class ProcessFile {
                 b.setPrev(-1);
                 f.seek(DP);
                 b.write(f);
-                size--;
-                return true;
+
             }else if(b.getNext()==-1){
                 b.setNext(FP);
+                FP = cur;
+                f.seek(8);
+                f.writeLong(FP);
+
+                b.clearRecord();
+                long prev = b.getPrev();
+                b.setPrev(-1L);
+                f.seek(cur);
+                b.write(f);
+
+                long next = b.getNext();
+                f.seek(next);
+                b.read(f);
+                b.setPrev(cur);
+                f.seek(next);
+                b.write(f);
+
+                f.seek(prev);
+                b.read(f);
+                b.setNext(-1L);
+                f.seek(prev);
+                b.write(f);
 
             }else{
+                long prev = b.getPrev(), next = b.getNext(), fp = FP;
+                b.clearRecord();
+                b.setPrev(-1);
+                b.setNext(FP);
+                FP = cur;
+                f.seek(8);
+                f.writeLong(FP);
 
+                f.seek(prev);
+                b.read(f);
+                b.setNext(next);
+                f.seek(prev);
+                b.write(f);
+
+                f.seek(next);
+                b.read(f);
+                b.setPrev(prev);
+                f.seek(next);
+                b.write(f);
+
+                f.seek(fp);
+                b.read(f);
+                b.setPrev(cur);
+                f.seek(fp);
+                b.write(f);
             }
+            size--;
+            return true;
 
         } catch (IOException e) {
             return false;
         }
-
-
-
-        return false;
     }
 
     public long searchPointer(int acct) {
