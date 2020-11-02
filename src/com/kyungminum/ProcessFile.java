@@ -128,12 +128,12 @@ public class ProcessFile {
             }
         } else {
             if (searchPointer(acct) != -1L){
-                System.out.println(searchPointer(acct));
+                System.out.println("searchpointer: " + searchPointer(acct));
                 return false;
             }
             try{
                 long prev = searchPrevPointer(acct);
-                System.out.println(prev);
+                System.out.println("prev: " + prev);
                 if(prev == -1L){
                     size += 1;
 
@@ -173,6 +173,7 @@ public class ProcessFile {
                 }
                 f.seek(prev);
                 long next = b.getNext();
+                System.out.println("next:" + next);
                 if(next == -1L){
                     f.seek(cur);
                     b.read(f);
@@ -181,19 +182,19 @@ public class ProcessFile {
                     b.setPrev(prev);
                     b.setNext(-1L);
                     f.seek(cur);
-                    b.read(f);
+                    b.write(f);
 
                     f.seek(prev);
                     b.read(f);
                     b.setNext(FP);
                     f.seek(prev);
-                    b.read(f);
+                    b.write(f);
 
                     f.seek(nextP);
                     b.read(f);
                     b.setPrev(-1L);
                     f.seek(nextP);
-                    b.read(f);
+                    b.write(f);
 
                     FP = nextP;
                     f.seek(8);
@@ -270,10 +271,11 @@ public class ProcessFile {
         } catch (IOException e) {
             return -1L;
         }
+        long ocur = cur;
         b.read(f);
         r = b.getRecord();
         while(r.getAccountNumber()<acct){
-            System.out.println(cur);
+            ocur= cur;
             cur = b.getNext();
             if (cur == -1){
                 break;
@@ -287,7 +289,7 @@ public class ProcessFile {
             r = b.getRecord();
         }
         if (cur == -1){
-            return -1l;
+            return ocur;
         }
         if (acct > r.getAccountNumber()){
             return cur;
