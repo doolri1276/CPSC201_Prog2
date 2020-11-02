@@ -30,6 +30,7 @@ public class Main {
         processFile.displayFile();
 
         System.out.println("============");
+        System.out.println(processFile.removeAccount(700));
 //        System.out.println(processFile.removeAccount(800));
 //        System.out.println(processFile.removeAccount(900));
 

@@ -320,11 +320,13 @@ public class ProcessFile {
                 f.seek(cur);
                 b.write(f);
 
-                f.seek(FP);
-                b.read(f);
-                b.setPrev(cur);
-                f.seek(FP);
-                b.write(f);
+                if(FP!=-1){
+                    f.seek(FP);
+                    b.read(f);
+                    b.setPrev(cur);
+                    f.seek(FP);
+                    b.write(f);
+                }
 
                 FP = cur;
                 f.seek(8);
@@ -387,11 +389,14 @@ public class ProcessFile {
                 f.seek(next);
                 b.write(f);
 
-                f.seek(fp);
-                b.read(f);
-                b.setPrev(cur);
-                f.seek(fp);
-                b.write(f);
+                if(fp!=-1){
+                    f.seek(fp);
+                    b.read(f);
+                    b.setPrev(cur);
+                    f.seek(fp);
+                    b.write(f);
+                }
+
             }
             size--;
             return true;
