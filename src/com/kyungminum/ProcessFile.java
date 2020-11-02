@@ -175,6 +175,8 @@ public class ProcessFile {
                 long next = b.getNext();
                 System.out.println("next:" + next);
                 if(next == -1L){
+
+                    System.out.println("1");
                     f.seek(cur);
                     b.read(f);
                     long nextP = b.getNext();
@@ -184,17 +186,20 @@ public class ProcessFile {
                     f.seek(cur);
                     b.write(f);
 
+                    System.out.println("2");
                     f.seek(prev);
                     b.read(f);
                     b.setNext(FP);
                     f.seek(prev);
                     b.write(f);
 
-                    f.seek(nextP);
-                    b.read(f);
-                    b.setPrev(-1L);
-                    f.seek(nextP);
-                    b.write(f);
+                    if (nextP != -1) {
+                        f.seek(nextP);
+                        b.read(f);
+                        b.setPrev(-1L);
+                        f.seek(nextP);
+                        b.write(f);
+                    }
 
                     FP = nextP;
                     f.seek(8);
