@@ -15,11 +15,11 @@ public class Record {
      * Constructors
      * */
     Record(){
-        this(-1, new char[NAME_LIMIT],new char[NAME_LIMIT],0);
+        this(-1, new char[0],new char[0],0);
     }
 
     public Record(int accountNumber, String fn, String ln, double balance) {
-        this(accountNumber, fn.toCharArray(), ln.toCharArray(), balance);
+        this(accountNumber, fn.trim().toCharArray(), ln.trim().toCharArray(), balance);
     }
 
     Record(int accountNumber, char[] fn, char[] ln, double balance) {
