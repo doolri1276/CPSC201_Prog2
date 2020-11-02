@@ -380,6 +380,9 @@ public class ProcessFile {
                 b.clearRecord();
                 b.setPrev(-1);
                 b.setNext(FP);
+                f.seek(cur);
+                b.write(f);
+
                 FP = cur;
                 f.seek(8);
                 f.writeLong(FP);
