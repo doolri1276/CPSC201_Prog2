@@ -175,8 +175,8 @@ public class ProcessFile {
                 long next = b.getNext();
                 System.out.println("next:" + next);
                 if(next == -1L){
+                    size++;
 
-                    System.out.println("1");
                     f.seek(cur);
                     b.read(f);
                     long nextP = b.getNext();
@@ -186,7 +186,6 @@ public class ProcessFile {
                     f.seek(cur);
                     b.write(f);
 
-                    System.out.println("2");
                     f.seek(prev);
                     b.read(f);
                     b.setNext(FP);
@@ -204,24 +203,41 @@ public class ProcessFile {
                     FP = nextP;
                     f.seek(8);
                     f.writeLong(FP);
-                    size += 1;
 
                     return true;
                 }
                 else{
+                    size++;
+
                     f.seek(cur);
+                    b.read(f);
+                    long nextP = b.getNext();
                     b.setRecord(r);
                     b.setPrev(prev);
                     b.setNext(next);
+                    f.seek(cur);
+                    b.write(f);
 
                     f.seek(prev);
+                    b.read(f);
                     b.setNext(cur);
+                    f.seek(prev);
+                    b.write(f);
 
                     f.seek(next);
+                    b.read(f);
                     b.setPrev(cur);
+                    f.seek(prev);
+                    b.write(f);
 
-                    FP+=b.SIZE;
-                    size += 1;
+                    if (size != FILE_SIZE) {
+                        f.seek(nextP);
+                        b.read(f);
+                        b.setPrev(-1L);
+                        f.seek(nextP);
+                        b.write(f);
+                    }
+
 
                     return true;
                 }
@@ -435,13 +451,13 @@ public class ProcessFile {
         b.read(f);
         r = b.getRecord();
         while(r.getAccountNumber()<=acct){
-            cur = b.getNext();
             if (cur == -1){
                 break;
             }
             if(r.getAccountNumber() == acct){
                 return cur;
             }
+            cur = b.getNext();
             try {
                 f.seek(cur);
             } catch (IOException e) {
