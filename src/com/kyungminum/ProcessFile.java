@@ -16,20 +16,11 @@ public class ProcessFile {
     ProcessFile(String fileName){
         try {
             f = new RandomAccessFile(fileName, "rw");
-
-            displayFile();
-
-        } catch (EOFException e) {
-            //Initialize file
-            initializeFile();
-            try {
-                displayFile();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        } catch (IOException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        displayFile();
 
     }
 
@@ -47,34 +38,46 @@ public class ProcessFile {
                 if(i==FILE_SIZE-1) b.setNext(-1);
                 else b.setNext(cur+Block.SIZE);
                 b.write(f);
-                //b.display();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void displayFile() throws IOException {
+    public void displayFile(){
         cur = 0;
         size = 0;
 
+        System.out.println("============================");
+        try {
+            f.seek(cur);
+            DP = f.readLong();
+            System.out.println("DP : "+DP);
+            FP = f.readLong();
+            System.out.println("FP : "+FP);
+            cur = f.getFilePointer();
+            Block b = new Block();
+            for (int i=0;i<FILE_SIZE;i++){
+                b.read(f);
+                if(b.getRecord().getAccountNumber()!= -1) size++;
+                b.display();
 
-        f.seek(cur);
-        DP = f.readLong();
-        System.out.println("DP : "+DP);
-        FP = f.readLong();
-        System.out.println("FP : "+FP);
-        cur = f.getFilePointer();
-        Block b = new Block();
-        for (int i=0;i<FILE_SIZE;i++){
-            b.read(f);
-            if(b.getRecord().getAccountNumber()!= -1) size++;
-            b.display();
+            }
 
+            System.out.println("SIZE : "+size+" ==============");
+            System.out.println();
+        } catch (IOException e) {
+            initializeFile();
+            displayFile();
         }
-        System.out.println("SIZE : "+size);
 
 
+
+
+    }
+
+    public boolean addAccount(int accountName, String firstname, String lastname, double balance){
+        return addAccount(new Record(accountName, firstname, lastname, balance));
     }
 
     public boolean addAccount(int accountName, char[] firstname, char[] lastname, double balance){

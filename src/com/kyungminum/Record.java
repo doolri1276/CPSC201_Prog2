@@ -18,7 +18,7 @@ public class Record {
         this(-1, new char[NAME_LIMIT],new char[NAME_LIMIT],0);
     }
 
-    public Record(int accountNumber, String fn, String ln, int balance) {
+    public Record(int accountNumber, String fn, String ln, double balance) {
         this(accountNumber, fn.toCharArray(), ln.toCharArray(), balance);
     }
 
