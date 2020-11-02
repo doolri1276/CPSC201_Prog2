@@ -133,7 +133,7 @@ public class ProcessFile {
             }
             try{
                 long prev = searchPrevPointer(acct);
-                System.out.println("prev: " + prev);
+                System.out.println("prev: " + prev+", acct : "+acct);
                 if(prev == -1L){
                     size += 1;
 
@@ -172,7 +172,11 @@ public class ProcessFile {
                     return true;
                 }
                 f.seek(prev);
+                b.read(f);
                 long next = b.getNext();
+                b.setNext(cur);
+                f.seek(prev);
+                b.write(f);
                 System.out.println("next:" + next);
                 if(next == -1L){
                     size++;
@@ -305,7 +309,7 @@ public class ProcessFile {
 
             ocur= cur;
             cur = b.getNext();
-            System.out.println("들어왔다.... ocur : "+ocur+", cur: "+cur);
+
             if (cur == -1){
                 break;
             }
@@ -316,18 +320,11 @@ public class ProcessFile {
             }
             b.read(f);
             r = b.getRecord();
-            System.out.println("[[][][][][][]"+b);
+
         }
 
-
-
-//        if (cur == -1){
         return ocur;
-//        }
-//        if (acct > r.getAccountNumber()){
-//            return cur;
-//        }
-//        return -1L;
+
     }
 
     public boolean removeAccount(int accountName){
