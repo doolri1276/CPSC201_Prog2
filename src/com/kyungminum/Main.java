@@ -11,7 +11,7 @@ public class Main {
         ProcessFile processFile = new ProcessFile("data.bin");
 
         Random r = new Random();
-//        System.out.println(processFile.addAccount(900, "gegwe", "egwg", r.nextDouble()/100));
+        System.out.println(processFile.addAccount(900, "gegwe", "egwg", r.nextDouble()/100));
 //        System.out.println(processFile.addAccount(800, "faf", "egwg", r.nextDouble()/100));
 //        System.out.println(processFile.addAccount(700, "gegefewwe", "egwg", r.nextDouble()/100));
 //        System.out.println(processFile.addAccount(600, "wafw", "egwg", r.nextDouble()/100));

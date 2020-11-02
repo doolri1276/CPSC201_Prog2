@@ -93,56 +93,90 @@ public class ProcessFile {
 
         Block b = new Block();
         Block pb = searchPrevBlock(r.getAccountNumber());
-        long prev = searchPointer(pb.getRecord().getAccountNumber());
-        long next = pb.getNext();
+        Block nb = new Block();
 
-        if (searchPointer(acct) != -1L){
-            return false;
-        }
-        try{
-            if(pb == null){
+        if (size == 0){
+            try{
+                DP = cur;
+                f.writeLong(DP);
+
                 f.seek(cur);
+                b.read(f);
                 b.setRecord(r);
                 b.setPrev(-1L);
-                b.setNext(DP);
-
-                f.seek(DP);
-                b.setPrev(FP);
-
-                DP = cur;
-                FP+=b.SIZE;
-
-                return true;
-            } else if(next == -1L){
+                b.setNext(-1L);
                 f.seek(cur);
-                b.setRecord(r);
-                b.setPrev(prev);
+                b.write(f);
 
-                f.seek(prev);
-                b.setNext(FP);
-
-                FP+=b.SIZE;
+                size += 1;
+                FP += b.SIZE;
+                f.writeLong(FP);
 
                 return true;
+
+            } catch (IOException e) {
+                return false;
             }
-            else{
-                f.seek(cur);
-                b.setRecord(r);
-                b.setPrev(prev);
-                b.setNext(next);
+        }
+        else {
 
-                f.seek(prev);
-                b.setNext(cur);
-
-                f.seek(next);
-                b.setPrev(cur);
-
-                FP+=b.SIZE;
-
-                return true;
+            if (searchPointer(acct) != -1L){
+                return false;
             }
-        } catch (IOException e){
-            return false;
+
+            try{
+                if(pb == null){
+                    f.seek(cur);
+                    b.setRecord(r);
+                    b.setPrev(-1L);
+                    b.setNext(DP);
+
+                    f.seek(DP);
+                    nb.read(f);
+                    nb.setPrev(FP);
+
+                    DP = cur;
+                    FP+=b.SIZE;
+                    size += 1;
+
+                    return true;
+                }
+                long prev = searchPointer(pb.getRecord().getAccountNumber());
+                long next = pb.getNext();
+
+                if(next == -1L){
+                    f.seek(cur);
+                    b.setRecord(r);
+                    b.setPrev(prev);
+
+                    f.seek(prev);
+                    pb.setNext(FP);
+
+                    FP+=b.SIZE;
+                    size += 1;
+
+                    return true;
+                }
+                else{
+                    f.seek(cur);
+                    b.setRecord(r);
+                    b.setPrev(prev);
+                    b.setNext(next);
+
+                    f.seek(prev);
+                    b.setNext(cur);
+
+                    f.seek(next);
+                    b.setPrev(cur);
+
+                    FP+=b.SIZE;
+                    size += 1;
+
+                    return true;
+                }
+            } catch (IOException e){
+                return false;
+            }
         }
     }
 
