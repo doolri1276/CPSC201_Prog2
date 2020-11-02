@@ -83,12 +83,16 @@ public class ProcessFile {
         return false;
     }
 
-    public Block searchBlock(int acct) throws IOException {
+    public Block searchBlock(int acct) {
         if(DP == -1) return null;
         long cur = DP;
         Block b = new Block();
         Record r = new Record();
-        f.seek(cur);
+        try {
+            f.seek(cur);
+        } catch (IOException e) {
+            return null;
+        }
         b.read(f);
         r = b.getRecord();
         while(r.getAccountNumber()<acct){
@@ -96,7 +100,11 @@ public class ProcessFile {
             if (cur == -1){
                 break;
             }
-            f.seek(cur);
+            try {
+                f.seek(cur);
+            } catch (IOException e) {
+                return null;
+            }
             b.read(f);
             r = b.getRecord();
         }
@@ -130,12 +138,16 @@ public class ProcessFile {
         return false;
     }
 
-    public long searchPointer(int acct) throws IOException {
+    public long searchPointer(int acct) {
         if(DP == -1) return -1L;
         long cur = DP;
         Block b = new Block();
         Record r = new Record();
-        f.seek(cur);
+        try {
+            f.seek(cur);
+        } catch (IOException e) {
+            return -1L;
+        }
         b.read(f);
         r = b.getRecord();
         while(r.getAccountNumber()<acct){
@@ -143,7 +155,11 @@ public class ProcessFile {
             if (cur == -1){
                 break;
             }
-            f.seek(cur);
+            try {
+                f.seek(cur);
+            } catch (IOException e) {
+                return -1L;
+            }
             b.read(f);
             r = b.getRecord();
         }

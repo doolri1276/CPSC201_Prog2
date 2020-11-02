@@ -46,6 +46,10 @@ public class Block {
         System.out.println();
     }
 
+    public void clearRecord(){
+        record = new Record();
+    }
+
     /**
      * Getter and Setter
      * */
