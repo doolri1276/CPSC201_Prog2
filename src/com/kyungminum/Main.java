@@ -15,10 +15,13 @@ public class Main {
         if(file.exists()) file.delete();
 
         ProcessFile processFile = new ProcessFile("data.bin");
-        
+
         System.out.println(processFile.addAccount(900, "gegwe", "egwg", 4005));
+        processFile.displayFile();
         System.out.println(processFile.addAccount(800, "faf", "egwg", 1009));
-//        System.out.println(processFile.addAccount(700, "gegefewwe", "egwg", 2097));
+        processFile.displayFile();
+        System.out.println(processFile.addAccount(700, "gegefewwe", "egwg", 2097));
+        processFile.displayFile();
 //        System.out.println(processFile.addAccount(600, "wafw", "egwg", 989));
 //        System.out.println(processFile.addAccount(500, "wf", "egwg", 650));
 //        System.out.println(processFile.addAccount(400, "va", "egwg", 0));
@@ -26,14 +29,15 @@ public class Main {
 //        System.out.println(processFile.addAccount(200, "ef", "egwg", 3098));
 //        System.out.println(processFile.addAccount(100, "aewg", "egwg", 1678));
 
-        processFile.displayFile();
 
-        System.out.println("============");
+
+
+/*        System.out.println("============");
         System.out.println(processFile.removeAccount(900));
 
 
 
-        processFile.displayFile();
+        processFile.displayFile();*/
 
         processFile.close();
 

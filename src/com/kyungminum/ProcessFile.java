@@ -135,6 +135,8 @@ public class ProcessFile {
                 long prev = searchPrevPointer(acct);
                 System.out.println(prev);
                 if(prev == -1L){
+                    size += 1;
+
                     f.seek(cur);
                     b.read(f);
                     long next = b.getNext();
@@ -144,15 +146,17 @@ public class ProcessFile {
                     f.seek(cur);
                     b.write(f);
 
-                    f.seek(next);
-                    b.read(f);
-                    b.setPrev(-1L);
-                    f.seek(next);
-                    b.write(f);
+                    if (size != FILE_SIZE){
+                        f.seek(next);
+                        b.read(f);
+                        b.setPrev(-1L);
+                        f.seek(next);
+                        b.write(f);
+                    }
 
                     f.seek(DP);
                     b.read(f);
-                    b.setPrev(FP);
+                    b.setPrev(cur);
                     f.seek(DP);
                     b.write(f);
 
@@ -163,7 +167,7 @@ public class ProcessFile {
                     FP = next;
                     f.seek(8);
                     f.writeLong(FP);
-                    size += 1;
+
 
                     return true;
                 }
@@ -171,13 +175,29 @@ public class ProcessFile {
                 long next = b.getNext();
                 if(next == -1L){
                     f.seek(cur);
+                    b.read(f);
+                    long nextP = b.getNext();
                     b.setRecord(r);
                     b.setPrev(prev);
+                    b.setNext(-1L);
+                    f.seek(cur);
+                    b.read(f);
 
                     f.seek(prev);
+                    b.read(f);
                     b.setNext(FP);
+                    f.seek(prev);
+                    b.read(f);
 
-                    FP+=b.SIZE;
+                    f.seek(nextP);
+                    b.read(f);
+                    b.setPrev(-1L);
+                    f.seek(nextP);
+                    b.read(f);
+
+                    FP = nextP;
+                    f.seek(8);
+                    f.writeLong(FP);
                     size += 1;
 
                     return true;
