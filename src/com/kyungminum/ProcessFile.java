@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class ProcessFile {
-    private static final int FILE_SIZE = 10;
+    private static final int FILE_SIZE = 3;
     private RandomAccessFile f;
     private long DP = -1;
     private long FP = -1;
@@ -274,19 +274,32 @@ public class ProcessFile {
                 f.seek(0);
                 DP = b.getNext();
                 f.writeLong(DP);
-                b.clearRecord();
-                b.setNext(FP);
-                FP = cur;
-                f.writeLong(FP);
 
+                b.clearRecord();
+                b.setPrev(-1);
+                b.setNext(FP);
                 f.seek(cur);
                 b.write(f);
 
-                f.seek(DP);
+                f.seek(FP);
                 b.read(f);
-                b.setPrev(-1);
-                f.seek(DP);
+                b.setPrev(cur);
+                f.seek(FP);
                 b.write(f);
+
+                FP = cur;
+                f.seek(8);
+                f.writeLong(FP);
+
+
+                if(DP!=-1){
+                    f.seek(DP);
+                    b.read(f);
+                    b.setPrev(-1);
+                    f.seek(DP);
+                    b.write(f);
+                }
+
 
             }else if(b.getNext()==-1){
                 b.setNext(FP);
@@ -344,6 +357,7 @@ public class ProcessFile {
             return true;
 
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }

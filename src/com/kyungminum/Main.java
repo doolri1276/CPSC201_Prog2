@@ -17,7 +17,7 @@ public class Main {
         ProcessFile processFile = new ProcessFile("data.bin");
         
         System.out.println(processFile.addAccount(900, "gegwe", "egwg", 4005));
-        System.out.println(processFile.addAccount(800, "faf", "egwg", 1009));
+//        System.out.println(processFile.addAccount(800, "faf", "egwg", 1009));
 //        System.out.println(processFile.addAccount(700, "gegefewwe", "egwg", 2097));
 //        System.out.println(processFile.addAccount(600, "wafw", "egwg", 989));
 //        System.out.println(processFile.addAccount(500, "wf", "egwg", 650));
@@ -25,6 +25,11 @@ public class Main {
 //        System.out.println(processFile.addAccount(300, "vw", "egwg", 3.14));
 //        System.out.println(processFile.addAccount(200, "ef", "egwg", 3098));
 //        System.out.println(processFile.addAccount(100, "aewg", "egwg", 1678));
+
+        processFile.displayFile();
+
+        System.out.println("============");
+        System.out.println(processFile.removeAccount(900));
 
 
 
